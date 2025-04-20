@@ -7,10 +7,6 @@ This Python script converts videos to a series of PNG images, allowing users to 
 To run this script, you'll need to ensure you have the required Python libraries. Install them using the `requirements.txt` file provided in this repository.
 
 
-## Installation
-
-To run this script, you'll need to ensure you have the required Python libraries. Install them using the `requirements.txt` file provided in this repository.
-
 ```
 pip install -r requirements.txt
 ```
@@ -51,6 +47,7 @@ python video_to_img.py [options]
 
 ## Note:
 ffmpeg download: https://www.ffmpeg.org/download.html
+
 ffmpeg with nvidia: https://github.com/m-ab-s/media-autobuild_suite?tab=readme-ov-file
 
 
