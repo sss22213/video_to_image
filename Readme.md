@@ -33,6 +33,8 @@ python video_to_img.py [options]
 
 - `-j`, `--thread_number`: uising thread number. Recommand 1.
 
+- `-a`, `--hardware_acc`: uising hardware accelate. ex: cuda
+
 ## Example
 
 1. To convert all video at folder A, putting video_to_img.py to folder A.

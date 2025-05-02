@@ -27,7 +27,7 @@ class video_to_img:
 
         return self.video_list
     
-    def __convert_to_img(self, videofile, output_folder, save_fps):
+    def __convert_to_img(self, videofile, output_folder, save_fps, hardware_acc):
         """
         Convert video to image.
         """
@@ -41,11 +41,11 @@ class video_to_img:
                     f"Unable to create folder {output_folder}, raise exception {e}")
                 return -1
         
-        p = subprocess.Popen([self.dev, '-i', videofile, '-vf', 'fps=' + str(save_fps), os.path.join(output_folder, str(time.time()) + '_out%d.png')])
+        p = subprocess.Popen([self.dev, '-hwaccel', hardware_acc, '-i', videofile, '-pix_fmt', 'rgb24', '-vf', 'fps=' + str(save_fps), os.path.join(output_folder, str(time.time()) + '_out%d.png')])
         p.wait()
 
 
-    def convert_to_img(self, output_folder, save_fps):
+    def convert_to_img(self, output_folder, save_fps, hardware_acc):
         """
         Convert multiple video to image.
         """
@@ -67,7 +67,7 @@ class video_to_img:
         while len(videolist) != 0:
             if threading.active_count() <= self.thread_number:
                 videofile = videolist.pop()
-                t = threading.Thread(target = self.__convert_to_img, args = (os.path.join(os.getcwd(), videofile), os.path.join(output_folder, str(count) + '_' + str(videofile)), save_fps))
+                t = threading.Thread(target = self.__convert_to_img, args = (os.path.join(os.getcwd(), videofile), os.path.join(output_folder, str(count) + '_' + str(videofile)), save_fps, hardware_acc))
                 t.start()
                 count = count + 1
 
@@ -86,6 +86,7 @@ def main():
                         default=".\\output", help="Path to the output folder (default is a folder named output in the current folder).")
     parser.add_argument("-f", "--fps", type=int, default=1, help="Frames per second to save.")
     parser.add_argument("-j", "--thread_number", type=int, default=1, help="thread number")
+    parser.add_argument("-a", "--hardware_acc", type=str, default='auto', help="hardware acc. ex: cuda")
     args = parser.parse_args()
     
     if not args.thread_number:
@@ -93,7 +94,7 @@ def main():
 
     v_to_i = video_to_img(args.ffmpeg_path, args.thread_number)
 
-    v_to_i.convert_to_img(args.output, args.fps)
+    v_to_i.convert_to_img(args.output, args.fps, args.hardware_acc)
 
 if __name__ == "__main__":
     main()
